@@ -12,5 +12,5 @@ hopefully the coming days will see a change to that.
 FEEL FREE TO USE WHATEVER CODE HOWEVER YOU PLEASE!!!!
 
 
-also, some sources that helped me with this project:
+also, some sources that helped me with this project:  
 https://github.com/davidcallanan/py-myopl-code
