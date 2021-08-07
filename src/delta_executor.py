@@ -10,10 +10,6 @@ class DeltaExecutor:
 	
 	def execute(self) -> None:
 		self.visit(self.program)
-		# for program in self.program:
-		# 	for statement in program.statements:
-		# 		res = self.visit(statement)
-		# 		print(res)
 	
 
 	def visit(self, node) -> Node:
