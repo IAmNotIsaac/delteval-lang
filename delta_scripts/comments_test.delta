@@ -1,0 +1,16 @@
+1 + 1; 		# Comment! Comments end at newline, so next statement will still run if on the next line.
+2 + 2;		# You can also escape comment-lock with another hashtag, like so! #
+3 + # the usefulness can be seen in a situation like this...sort of... # 3;
+
+# Wanna make large structures of comments?
+# Don't wanna put a hashtag at the start of each comment?
+# Maybe you just wanna comment out a section of code?
+
+#> Multiline comments make it easy!
+wow, look at this!
+crazy!
+you can end the multiline comment with just a simple little <#
+
+#> # inside of comment??? <#
+
+2 + 2;

@@ -1,0 +1,25 @@
+scope			| SCOPE_BEGIN (scope EOS)* SCOPE_END
+				: expression
+
+
+expression		| comp-expr
+
+
+comp-expr		: arith-expr ((EQUALS|NEQUALS|LESSER|GREATER|LEQUALS|GEQUALS) arith-expr)*
+
+
+arith-expr		: term ((PLUS|MINUS) term)*
+
+
+term			: factor ((MULT|DIV) factor)*
+
+
+factor			: (PLUS|MINUS) factor
+				| power
+
+				
+power			: atom (POW factor)*
+
+
+atom			: INT|FLOAT
+				| LBRACKET expression RBRACKET
