@@ -24,4 +24,8 @@ power			: atom (POW factor)*
 
 atom			: INT|FLOAT
 				| true|false
+				| if-expr
 				| LBRACKET expression RBRACKET
+
+
+if-expr			: if scope then scope

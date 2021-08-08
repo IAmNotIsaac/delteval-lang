@@ -42,22 +42,22 @@ class DeltaNumber:
 
 	def comp_ee(self, right):
 		if isinstance(right, DeltaNumber):
-			return DeltaNumber(int(self.value == right.value))
+			return DeltaBool(bool(self.value == right.value))
 	
 
 	def comp_ne(self, right):
 		if isinstance(right, DeltaNumber):
-			return DeltaNumber(int(self.value != right.value))
+			return DeltaBool(bool(self.value != right.value))
 	
 
 	def comp_lr(self, right):
 		if isinstance(right, DeltaNumber):
-			return DeltaNumber(int(self.value < right.value))
+			return DeltaBool(bool(self.value < right.value))
 
 
 	def comp_gr(self, right):
 		if isinstance(right, DeltaNumber):
-			return DeltaNumber(int(self.value > right.value))
+			return DeltaBool(bool(self.value > right.value))
 
 
 	def comp_le(self, right):

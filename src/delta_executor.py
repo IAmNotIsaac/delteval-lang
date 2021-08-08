@@ -38,6 +38,15 @@ class DeltaExecutor:
 		# make scopes return a return value later when i get that figured out
 
 
+	def visit_IfNode(self, node):
+		res = self.visit(node.eval_scope)
+
+		if res.value == True:
+			self.visit(node.action_scope)
+			return True
+		return False
+
+
 	def visit_BinOpNode(self, node):
 		OP_METHODS = {
 			Token.OP_PLUS: 			"add",

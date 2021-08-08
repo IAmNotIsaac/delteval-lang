@@ -108,7 +108,9 @@ class DeltaLexer:
 	KEYWORDS = [
 		"print",
 		"true",
-		"false"
+		"false",
+		"if",
+		"then"
 	]
 
 

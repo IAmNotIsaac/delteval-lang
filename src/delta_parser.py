@@ -32,6 +32,12 @@ class ScopeNode(Node):
 		return f"{self.statements}"
 
 
+class IfNode(Node):
+	def __init__(self, eval_scope, action_scope) -> None:
+		self.eval_scope = eval_scope
+		self.action_scope = action_scope
+
+
 class PrintNode(Node):
 	def __init__(self, node) -> None:
 		self.node = node
@@ -162,6 +168,16 @@ class DeltaParser:
 			elif token.value == "false":
 				self.advance()
 				return BooleanNode(token)
+			
+			elif token.value == "if":
+				self.advance()
+
+				eval_scope = self.make_scope()
+
+				if self.token.matches(Token.TYPE_KEYWORD) and self.token.value == "then":
+					self.advance()
+
+					return IfNode(eval_scope, self.make_scope())
 		
 
 		elif token.matches(Token.OP_LBRACKET):
