@@ -157,7 +157,7 @@ class DeltaParser:
 				if self.token.matches(Token.TYPE_KEYWORD) and self.token.value == "then":
 					self.advance()
 
-					return IfNode(eval_scope, self.make_expression())
+					return IfNode(eval_scope, self.make_scope())
 		
 
 		elif token.matches(Token.OP_LBRACKET):

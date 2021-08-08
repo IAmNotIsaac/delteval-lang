@@ -1,4 +1,5 @@
-expression		: print scope
+expression		: print expression
+				| return expression
 				| comp-expr
 
 
