@@ -29,7 +29,7 @@ class ScopeNode(Node):
 	
 
 	def __repr__(self) -> str:
-		return f"{self.statements}"
+		return f"Scope{self.statements}"
 
 
 class IfNode(Node):
@@ -41,6 +41,10 @@ class IfNode(Node):
 class PrintNode(Node):
 	def __init__(self, node) -> None:
 		self.node = node
+	
+
+	def __repr__(self) -> str:
+		return f"Print({self.node})"
 
 
 class BinOpNode(Node):
@@ -81,43 +85,19 @@ class DeltaParser:
 	
 
 	def parse(self) -> Node:
-		expr = self.make_scope()
+		expr = self.make_expression()
 		return expr
 	
 
 	#####
-
-
-	def make_scope(self) -> Node:
-		if self.token.matches(Token.TYPE_KEYWORD):
-			if self.token.value == "print":
-				self.advance()
-				return PrintNode(self.make_scope())
-
-
-		elif self.token.matches(Token.OP_SCOPE_BEGIN):
-			self.advance()
-
-			statements = []
-
-			while True:
-				statements.append(self.make_scope())
-				self.advance()
-
-				if self.token.matches(Token.OP_EOS):
-					continue
-				elif self.token.matches(Token.OP_SCOPE_END):
-					break
-				else:
-					# error message!
-					pass
-
-			return ScopeNode(statements)
-		
-		return self.make_expression()
 		
 
 	def make_expression(self) -> Node:
+		if self.token.matches(Token.TYPE_KEYWORD):
+			if self.token.value == "print":
+				self.advance()
+				return PrintNode(self.make_expression())
+		
 		return self.make_comp_expr()
 
 
@@ -172,12 +152,12 @@ class DeltaParser:
 			elif token.value == "if":
 				self.advance()
 
-				eval_scope = self.make_scope()
+				eval_scope = self.make_expression()
 
 				if self.token.matches(Token.TYPE_KEYWORD) and self.token.value == "then":
 					self.advance()
 
-					return IfNode(eval_scope, self.make_scope())
+					return IfNode(eval_scope, self.make_expression())
 		
 
 		elif token.matches(Token.OP_LBRACKET):
@@ -189,6 +169,42 @@ class DeltaParser:
 				self.advance()
 
 				return expr
+		
+		return self.make_scope()
+
+
+	def make_scope(self) -> Node:
+		if self.token.matches(Token.OP_SCOPE_BEGIN):
+			self.advance()
+
+			statements = []
+
+			while True:
+				expr = self.make_expression()
+
+				if expr:
+					print(self.token)
+					if self.token.matches(Token.OP_EOS):
+						statements.append(expr)
+						self.advance()
+						continue
+
+					elif self.token.matches(Token.OP_SCOPE_END):
+						statements.append(expr)
+						break
+
+					else:
+						# ?????
+						statements.append(expr)
+				
+				else:
+					break
+				
+
+			if self.token.matches(Token.OP_SCOPE_END):
+				self.advance()
+
+				return ScopeNode(statements)
 
 
 	#####

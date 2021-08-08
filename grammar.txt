@@ -1,9 +1,5 @@
-scope			: print scope
-				| SCOPE_BEGIN (scope EOS)* SCOPE_END
-				| expression
-
-
-expression		| comp-expr
+expression		: print scope
+				| comp-expr
 
 
 comp-expr		: arith-expr ((EQUALS|NEQUALS|LESSER|GREATER|LEQUALS|GEQUALS) arith-expr)*
@@ -24,8 +20,9 @@ power			: atom (POW factor)*
 
 atom			: INT|FLOAT
 				| true|false
-				| if-expr
+				| if expression then scope
 				| LBRACKET expression RBRACKET
+				| scope
 
 
-if-expr			: if scope then scope
+scope			: SCOPE_BEGIN (expression EOS|expression)* SCOPE_END
