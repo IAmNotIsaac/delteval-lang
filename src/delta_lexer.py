@@ -5,6 +5,7 @@ class Token:
 	TYPE_INT 		= 	0x00_0000
 	TYPE_FLOAT 		= 	0x00_0001
 	TYPE_IDENTIFER	=	0x00_0002
+	TYPE_KEYWORD	=	0x00_0003
 
 	OP_EOS			=	0x01_0000 # end of statement
 	OP_EOF			=	0x01_0001 # end of file
@@ -37,7 +38,8 @@ class Token:
 		REPR_KEY = {
 			Token.TYPE_INT:			"INT",
 			Token.TYPE_FLOAT:		"FLOAT",
-			Token.TYPE_IDENTIFER:	"IDENT", 
+			Token.TYPE_IDENTIFER:	"IDENT",
+			Token.TYPE_KEYWORD:		"KEYWORD",
 
 			Token.OP_EOS:			"EOS",
 			Token.OP_EOF:			"EOF",
@@ -103,6 +105,9 @@ class DeltaLexer:
 		"{":	Token.OP_SCOPE_BEGIN,
 		"}":	Token.OP_SCOPE_END
 	}
+	KEYWORDS = [
+		"print"
+	]
 
 
 	def __init__(self, source: str) -> None:
@@ -166,7 +171,11 @@ class DeltaLexer:
 
 			self.advance()
 		
-		return Token(Token.TYPE_IDENTIFER, identifier)
+
+		if identifier in DeltaLexer.KEYWORDS:
+			return Token(Token.TYPE_KEYWORD, identifier)
+		else:
+			return Token(Token.TYPE_IDENTIFER, identifier)
 
 
 

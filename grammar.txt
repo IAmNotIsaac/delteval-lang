@@ -1,4 +1,5 @@
-scope			| SCOPE_BEGIN (scope EOS)* SCOPE_END
+scope			| print scope
+				: SCOPE_BEGIN (scope EOS)* SCOPE_END
 				: expression
 
 

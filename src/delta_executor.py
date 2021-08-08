@@ -18,12 +18,16 @@ class DeltaExecutor:
 		return method(node)
 	
 
+	def visit_PrintNode(self, node) -> Node:
+		print(self.visit(node.node))
+		return None
+	
+
 	def visit_ScopeNode(self, node) -> Node:
 		for statement in node.statements:
 			res = self.visit(statement)
-			if not isinstance(res, DeltaScope):
-				print(res)
 		return DeltaScope(node.statements)
+		# make scopes return a return value later when i get that figured out
 	
 
 	def visit_NumberNode(self, node) -> Node:

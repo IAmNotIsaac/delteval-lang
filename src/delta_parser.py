@@ -6,6 +6,11 @@ class Node:
 	pass
 
 
+class PrintNode(Node):
+	def __init__(self, node) -> None:
+		self.node = node
+
+
 class ScopeNode(Node):
 	def __init__(self, statements) -> None:
 		self.statements = statements
@@ -70,7 +75,13 @@ class DeltaParser:
 
 
 	def make_scope(self) -> Node:
-		if self.token.matches(Token.OP_SCOPE_BEGIN):
+		if self.token.matches(Token.TYPE_KEYWORD):
+			if self.token.value == "print":
+				self.advance()
+				return PrintNode(self.make_scope())
+
+
+		elif self.token.matches(Token.OP_SCOPE_BEGIN):
 			self.advance()
 
 			statements = []
