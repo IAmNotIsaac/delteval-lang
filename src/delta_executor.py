@@ -18,23 +18,27 @@ class DeltaExecutor:
 		return method(node)
 	
 
-	def visit_PrintNode(self, node) -> Node:
+	def visit_NumberNode(self, node):
+		return DeltaNumber(node.tok.value)
+	
+
+	def visit_BooleanNode(self, node):
+		return DeltaBool(node.tok.value)
+	
+
+	def visit_PrintNode(self, node):
 		print(self.visit(node.node))
 		return None
 	
 
-	def visit_ScopeNode(self, node) -> Node:
+	def visit_ScopeNode(self, node):
 		for statement in node.statements:
 			res = self.visit(statement)
 		return DeltaScope(node.statements)
 		# make scopes return a return value later when i get that figured out
-	
-
-	def visit_NumberNode(self, node) -> Node:
-		return DeltaNumber(node.tok.value)
 
 
-	def visit_BinOpNode(self, node) -> None:
+	def visit_BinOpNode(self, node):
 		OP_METHODS = {
 			Token.OP_PLUS: 			"add",
 			Token.OP_MINUS:			"subtract",
@@ -58,7 +62,7 @@ class DeltaExecutor:
 		return result
 	
 
-	def visit_UnaryOpNode(self, node) -> None:
+	def visit_UnaryOpNode(self, node):
 		number = self.visit(node.node)
 
 		if node.op_tok.matches(Token.OP_PLUS):

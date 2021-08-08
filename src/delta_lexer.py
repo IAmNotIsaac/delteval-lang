@@ -106,7 +106,9 @@ class DeltaLexer:
 		"}":	Token.OP_SCOPE_END
 	}
 	KEYWORDS = [
-		"print"
+		"print",
+		"true",
+		"false"
 	]
 
 

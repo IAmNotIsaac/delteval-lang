@@ -1,6 +1,6 @@
-scope			| print scope
-				: SCOPE_BEGIN (scope EOS)* SCOPE_END
-				: expression
+scope			: print scope
+				| SCOPE_BEGIN (scope EOS)* SCOPE_END
+				| expression
 
 
 expression		| comp-expr
@@ -23,4 +23,5 @@ power			: atom (POW factor)*
 
 
 atom			: INT|FLOAT
+				| true|false
 				| LBRACKET expression RBRACKET

@@ -62,12 +62,12 @@ class DeltaNumber:
 
 	def comp_le(self, right):
 		if isinstance(right, DeltaNumber):
-			return DeltaNumber(int(self.value <= right.value))
+			return DeltaBool(bool(self.value <= right.value))
 
 
 	def comp_ge(self, right):
 		if isinstance(right, DeltaNumber):
-			return DeltaNumber(int(self.value >= right.value))
+			return DeltaBool(bool(self.value >= right.value))
 
 
 
@@ -78,6 +78,16 @@ class DeltaBool:
 
 	def __repr__(self) -> str:
 		return str(self.value).lower()
+	
+
+	def comp_ee(self, right):
+		if isinstance(right, DeltaBool):
+			return DeltaBool(bool(self.value == right.value))
+	
+
+	def comp_ne(self, right):
+		if isinstance(right, DeltaBool):
+			return DeltaBool(bool(self.value != right.value))
 
 
 class DeltaScope:

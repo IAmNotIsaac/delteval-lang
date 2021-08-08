@@ -6,10 +6,22 @@ class Node:
 	pass
 
 
-class PrintNode(Node):
-	def __init__(self, node) -> None:
-		self.node = node
+class NumberNode(Node):
+	def __init__(self, tok) -> None:
+		self.tok = tok
+	
 
+	def __repr__(self) -> str:
+		return f"{self.tok.value}"
+
+
+class BooleanNode(Node):
+	def __init__(self, tok) -> None:
+		self.tok = tok
+	
+
+	def __repr__(self) -> str:
+		return f"{self.tok}"
 
 class ScopeNode(Node):
 	def __init__(self, statements) -> None:
@@ -20,13 +32,9 @@ class ScopeNode(Node):
 		return f"{self.statements}"
 
 
-class NumberNode(Node):
-	def __init__(self, tok) -> None:
-		self.tok = tok
-	
-
-	def __repr__(self) -> str:
-		return f"{self.tok.value}"
+class PrintNode(Node):
+	def __init__(self, node) -> None:
+		self.node = node
 
 
 class BinOpNode(Node):
@@ -144,6 +152,16 @@ class DeltaParser:
 			self.advance()
 
 			return NumberNode(token)
+		
+
+		elif token.matches(Token.TYPE_KEYWORD):
+			if token.value == "true":
+				self.advance()
+				return BooleanNode(token)
+
+			elif token.value == "false":
+				self.advance()
+				return BooleanNode(token)
 		
 
 		elif token.matches(Token.OP_LBRACKET):
