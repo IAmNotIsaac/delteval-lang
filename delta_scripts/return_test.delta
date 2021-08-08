@@ -1,0 +1,10 @@
+print { return 1; };		# we expect 1 to be printed
+print { return 1 + 1; };	# we expect 2 to be printed
+
+if { return 1; } == 1 {
+	print 3;				# we expect 3 to be printed
+};
+
+if { return 2; } == 1 {
+	print 4;				# we expect 4 not to be printed
+}

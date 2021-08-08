@@ -1,5 +1,5 @@
 from delta_types import *
-from delta_parser import Node, ScopeNode
+from delta_parser import Node, ReturnNode, ScopeNode
 from delta_lexer import Token
 
 
@@ -34,8 +34,13 @@ class DeltaExecutor:
 	def visit_ScopeNode(self, node):
 		for statement in node.statements:
 			res = self.visit(statement)
-		return DeltaScope(node.statements)
-		# make scopes return a return value later when i get that figured out
+
+			if isinstance(statement, ReturnNode):
+				return res
+	
+
+	def visit_ReturnNode(self, node):
+		return self.visit(node.node)
 
 
 	def visit_IfNode(self, node):

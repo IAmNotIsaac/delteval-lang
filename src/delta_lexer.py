@@ -110,7 +110,8 @@ class DeltaLexer:
 		"true",
 		"false",
 		"if",
-		"then"
+		"then",
+		"return"
 	]
 
 

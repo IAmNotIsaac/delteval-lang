@@ -47,6 +47,15 @@ class PrintNode(Node):
 		return f"Print({self.node})"
 
 
+class ReturnNode(Node):
+	def __init__(self, node) -> None:
+		self.node = node
+	
+
+	def __repr__(self) -> str:
+		return f"Print({self.node})"
+
+
 class BinOpNode(Node):
 	def __init__(self, left_node, op_tok, right_node) -> None:
 		self.left_node = left_node
@@ -97,6 +106,10 @@ class DeltaParser:
 			if self.token.value == "print":
 				self.advance()
 				return PrintNode(self.make_expression())
+			
+			elif self.token.value == "return":
+				self.advance()
+				return ReturnNode(self.make_expression())
 		
 		return self.make_comp_expr()
 
