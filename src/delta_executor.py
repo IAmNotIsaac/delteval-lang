@@ -1,5 +1,5 @@
 from delta_types import *
-from delta_parser import Node, ReturnNode, ScopeNode
+from delta_parser import BooleanNode, Node, ReturnNode, ScopeNode
 from delta_lexer import Token
 
 
@@ -48,8 +48,8 @@ class DeltaExecutor:
 
 		if res.value == True:
 			self.visit(node.action_scope)
-			return True
-		return False
+			return BooleanNode(True)
+		return BooleanNode(False)
 
 
 	def visit_BinOpNode(self, node):
