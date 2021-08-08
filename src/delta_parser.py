@@ -183,7 +183,6 @@ class DeltaParser:
 				expr = self.make_expression()
 
 				if expr:
-					print(self.token)
 					if self.token.matches(Token.OP_EOS):
 						statements.append(expr)
 						self.advance()
