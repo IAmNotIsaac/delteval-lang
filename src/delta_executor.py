@@ -48,8 +48,8 @@ class DeltaExecutor:
 
 		if res.value == True:
 			self.visit(node.action_scope)
-			return BooleanNode(True)
-		return BooleanNode(False)
+			return DeltaBool(True)
+		return DeltaBool(False)
 
 
 	def visit_BinOpNode(self, node):
