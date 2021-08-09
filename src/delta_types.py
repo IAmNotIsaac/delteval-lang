@@ -90,6 +90,32 @@ class DeltaBool:
 			return DeltaBool(bool(self.value != right.value))
 
 
+
+class DeltaString:
+	def __init__(self, value) -> None:
+		self.value = value
+	
+
+	def __repr__(self) -> str:
+		return self.value
+
+
+	def add(self, right):
+		if isinstance(right, DeltaString):
+			return DeltaString(self.value + right.value)
+	
+
+	def comp_ee(self, right):
+		if isinstance(right, DeltaString):
+			return DeltaBool(bool(self.value == right.value))
+	
+
+	def comp_ne(self, right):
+		if isinstance(right, DeltaString):
+			return DeltaBool(bool(self.value != right.value))
+
+
+
 class DeltaScope:
 	def __init__(self, statements) -> None:
 		self.statements = statements

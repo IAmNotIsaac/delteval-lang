@@ -1,0 +1,5 @@
+print "test!";								# expect "test!" as output
+print "\"test 2!\"";						# expect <<"test 2!">> as output
+print "\n";									# expect newline as output
+print "newline\ntest!";						# expect "newline" followed with a newline, followed with "test!"
+print "\nstring " + "concatenation!";		# expect a newline, followed with "string concatenation!"

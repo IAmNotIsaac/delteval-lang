@@ -26,6 +26,10 @@ class DeltaExecutor:
 		return DeltaBool(node.tok.value)
 	
 
+	def visit_StringNode(self, node):
+		return DeltaString(node.tok.value)
+
+
 	def visit_PrintNode(self, node):
 		print(self.visit(node.node))
 		return None

@@ -6,6 +6,7 @@ class Token:
 	TYPE_FLOAT 		= 	0x00_0001
 	TYPE_IDENTIFER	=	0x00_0002
 	TYPE_KEYWORD	=	0x00_0003
+	TYPE_STRING		=	0x00_0004
 
 	OP_EOS			=	0x01_0000 # end of statement
 	OP_EOF			=	0x01_0001 # end of file
@@ -40,6 +41,7 @@ class Token:
 			Token.TYPE_FLOAT:		"FLOAT",
 			Token.TYPE_IDENTIFER:	"IDENT",
 			Token.TYPE_KEYWORD:		"KEYWORD",
+			Token.TYPE_STRING:		"STRING",
 
 			Token.OP_EOS:			"EOS",
 			Token.OP_EOF:			"EOF",
@@ -113,6 +115,8 @@ class DeltaLexer:
 		"then",
 		"return"
 	]
+	STRING_WRAP = "\""
+	ESCAPE_CHAR = "\\"
 
 
 	def __init__(self, source: str) -> None:
@@ -152,6 +156,8 @@ class DeltaLexer:
 				self.advance()
 			elif self.char in DeltaLexer.LETTERS:
 				tokens.append(self.make_identifier())
+			elif self.char in DeltaLexer.STRING_WRAP:
+				tokens.append(self.make_string())
 			elif self.char in DeltaLexer.NUMBERS:
 				tokens.append(self.make_number())
 			elif self.char in DeltaLexer.OPERATORS:
@@ -181,7 +187,38 @@ class DeltaLexer:
 			return Token(Token.TYPE_KEYWORD, identifier)
 		else:
 			return Token(Token.TYPE_IDENTIFER, identifier)
+	
 
+	def make_string(self) -> Token:
+		string = ""
+		self.advance()
+
+		ESCAPE_SEQUENCES = {
+			"\"":	"\"",
+			"n":	"\n",
+			"b":	"\b",
+			"a":	"\a",
+			"t":	"\t",
+			"v":	"\v",
+			"r":	"\r",
+			"f":	"\f"
+		}
+
+		while self.char and self.char != DeltaLexer.STRING_WRAP:
+			if self.char == DeltaLexer.ESCAPE_CHAR:
+				self.advance()
+
+				string += ESCAPE_SEQUENCES[self.char]
+
+				self.advance()
+			
+			else:
+				string += self.char
+				self.advance()
+		
+		self.advance()
+		
+		return Token(Token.TYPE_STRING, string)
 
 
 	def make_number(self) -> Token:

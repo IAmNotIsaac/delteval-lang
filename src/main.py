@@ -3,7 +3,7 @@ from delta_parser import DeltaParser
 from delta_executor import DeltaExecutor
 
 
-source = open("delta_scripts/return_test.delta").read()
+source = open("delta_scripts/string_test.delta").read()
 
 lexer = DeltaLexer(source)
 tokens = lexer.parse()

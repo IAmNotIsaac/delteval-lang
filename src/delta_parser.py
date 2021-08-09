@@ -23,6 +23,16 @@ class BooleanNode(Node):
 	def __repr__(self) -> str:
 		return f"{self.tok}"
 
+
+class StringNode(Node):
+	def __init__(self, tok) -> None:
+		self.tok = tok
+	
+
+	def __repr__(self) -> str:
+		return f"\"{self.tok.value}\""
+
+
 class ScopeNode(Node):
 	def __init__(self, statements) -> None:
 		self.statements = statements
@@ -151,6 +161,12 @@ class DeltaParser:
 			self.advance()
 
 			return NumberNode(token)
+		
+
+		elif token.matches(Token.TYPE_STRING):
+			self.advance()
+
+			return StringNode(token)
 		
 
 		elif token.matches(Token.TYPE_KEYWORD):
