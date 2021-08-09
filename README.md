@@ -5,9 +5,8 @@ programming language made in python simply for the purpose of learning programmi
 due to its current stage in development, it pretty much serves as a basic calculator.
 all expressions will be evaluated and printed out in order.
 
-scopes, though existing, have no purpose, as i havent gotten around to adding variables or functions yet.
+scopes, though existing, have <s>no</s> **LOTS OF** purpose, as i <s>havent</s> **HAVE** gotten around to adding variables <s>or</s> **BUT NOT** functions yet.
 hopefully the coming days will see a change to that.
-
 
 FEEL FREE TO USE WHATEVER CODE HOWEVER YOU PLEASE!!!!
 
