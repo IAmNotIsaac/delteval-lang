@@ -113,7 +113,8 @@ class DeltaLexer:
 		"false",
 		"if",
 		"then",
-		"return"
+		"return",
+		"let"
 	]
 	STRING_WRAP = "\""
 	ESCAPE_CHAR = "\\"

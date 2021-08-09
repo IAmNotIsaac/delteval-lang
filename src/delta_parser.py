@@ -1,5 +1,6 @@
 from os import stat
 from delta_lexer import Token
+from delta_types import DeltaNone
 
 
 class Node:
@@ -33,13 +34,66 @@ class StringNode(Node):
 		return f"\"{self.tok.value}\""
 
 
+class VarAccessNode(Node):
+	def __init__(self, name_tok) -> None:
+		self.name_tok = name_tok
+	
+
+	def __repr__(self) -> str:
+		return f"VariableAccess({self.name_tok.value})"
+
+
+class VarAssignNode(Node):
+	def __init__(self, name_tok, node) -> None:
+		self.name_tok = name_tok
+		self.node = node
+	
+
+	def __repr__(self) -> str:
+		return f"VariableAssign({self.name_tok.value} = {self.node})"
+
+
 class ScopeNode(Node):
 	def __init__(self, statements) -> None:
 		self.statements = statements
+
+		# we use these for the executor
+		self.variables = {}
+		self.parent = None
 	
 
 	def __repr__(self) -> str:
 		return f"Scope{self.statements}"
+
+	
+	# also used for the executor
+	def get_variable_owner(self, var_name):
+		if var_name in self.variables:
+			return self
+
+		elif self.parent:
+			return self.parent.get_variable_owner(var_name)
+		
+		else:
+			return None
+
+	
+	def get_variable(self, var_name):
+		owner = self.get_variable_owner(var_name)
+
+		if owner:
+			return owner.variables[var_name]
+		else:
+			return DeltaNone()
+	
+
+	def set_variable(self, var_name, value):
+		owner = self.get_variable_owner(var_name)
+
+		if owner:
+			owner.variables[var_name] = value
+		else:
+			self.variables[var_name] = value
 
 
 class IfNode(Node):
@@ -120,6 +174,18 @@ class DeltaParser:
 			elif self.token.value == "return":
 				self.advance()
 				return ReturnNode(self.make_expression())
+			
+			elif self.token.value == "let":
+				self.advance()
+
+				if self.token.matches(Token.TYPE_IDENTIFER):
+					var_name = self.token
+					self.advance()
+
+					if self.token.matches(Token.OP_ASSIGN):
+						self.advance()
+
+						return VarAssignNode(var_name, self.make_expression())
 		
 		return self.make_comp_expr()
 
@@ -167,6 +233,12 @@ class DeltaParser:
 			self.advance()
 
 			return StringNode(token)
+		
+
+		elif token.matches(Token.TYPE_IDENTIFER):
+			self.advance()
+
+			return VarAccessNode(token)
 		
 
 		elif token.matches(Token.TYPE_KEYWORD):

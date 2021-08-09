@@ -116,6 +116,12 @@ class DeltaString:
 
 
 
+class DeltaNone:
+	def __repr__(self) -> str:
+		return "null"
+
+
+
 class DeltaScope:
 	def __init__(self, statements) -> None:
 		self.statements = statements
