@@ -27,6 +27,7 @@ atom			: INT|FLOAT
 				| if expression then scope
 				| LBRACKET expression RBRACKET
 				| scope
+				| ARRAY_BEGIN (expression, COMMA)* ARRAY_END : (ARRAY_BEGIN INT ARRAY_END)?
 
 
 scope			: SCOPE_BEGIN (expression EOS|expression)* SCOPE_END

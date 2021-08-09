@@ -28,6 +28,14 @@ class DeltaExecutor:
 
 	def visit_StringNode(self, node, scope):
 		return DeltaString(node.tok.value)
+	
+
+	def visit_ArrayNode(self, node, scope):
+		temp = []
+		for value in node.value:
+			temp.append(self.visit(value, scope))
+
+		return DeltaArray(self.visit(node.length, scope), temp)
 
 
 	def visit_VarAccessNode(self, node, scope):

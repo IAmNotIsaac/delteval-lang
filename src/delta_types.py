@@ -116,6 +116,17 @@ class DeltaString:
 
 
 
+class DeltaArray:
+	def __init__(self, length, value) -> None:
+		self.length = length
+		self.value = value
+
+
+	def __repr__(self) -> str:
+		return str(self.value)
+
+
+
 class DeltaNone:
 	def __repr__(self) -> str:
 		return "null"

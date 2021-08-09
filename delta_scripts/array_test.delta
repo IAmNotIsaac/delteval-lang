@@ -1,0 +1,14 @@
+print [1, 2, 3];		# expect [1, 2, 3]
+let a = [4, 5, 6];
+print a;				# expect [4, 5, 6]
+
+
+#>
+by default, an array's length gets pre-determined by the count of elements it
+was initialized with. however, a specific limit can be set simply by appending
+[l] directly after the array, where l is the chosen length of the array.
+example can be seen below.
+<#
+
+let b = [7, 8, 9] : [5];	# the array was initialized with 3 elements, however, it has room for 5.
+print b;

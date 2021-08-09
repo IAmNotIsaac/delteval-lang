@@ -29,6 +29,10 @@ class Token:
 
 	OP_SCOPE_BEGIN	=	0x01_0010
 	OP_SCOPE_END	=	0x01_0011
+	OP_ARRAY_BEGIN	=	0x01_0012
+	OP_ARRAY_END	=	0x01_0013
+	OP_COMMA		=	0x01_0014
+	OP_SPECIFY		=	0x01_0015
 
 	def __init__(self, tok_type: int, value=None) -> None:
 		self.tok_type = tok_type
@@ -63,7 +67,11 @@ class Token:
 			Token.OP_GEQUALS:		"OP_GEQUALS",
 
 			Token.OP_SCOPE_BEGIN:	"OP_SCOPE_BEGIN",
-			Token.OP_SCOPE_END:		"OP_SCOPE_END"
+			Token.OP_SCOPE_END:		"OP_SCOPE_END",
+			Token.OP_ARRAY_BEGIN:	"OP_ARRAY_BEGIN",
+			Token.OP_ARRAY_END:		"OP_ARRAY_END",
+			Token.OP_COMMA:			"OP_COMMA",
+			Token.OP_SPECIFY:		"OP_SPECIFY"
 		}
 
 		return f"{REPR_KEY[self.tok_type]}({self.value})" if self.value != None else f"{REPR_KEY[self.tok_type]}"
@@ -84,7 +92,7 @@ class DeltaLexer:
 	CLOSE_MULTILINE_COMMENT_CHAR = "<"
 	LETTERS = "abcdefghijklmnopqrstuvwxyz_"
 	NUMBERS = "1234567890."
-	OPERATORS = ";+-*/()=!<>^{}"
+	OPERATORS = ";+-*/()=!<>^{}[],:"
 	OPERATORS_COMBOS = {
 		";": 	Token.OP_EOS,
 
@@ -105,7 +113,11 @@ class DeltaLexer:
 		">=":	Token.OP_GEQUALS,
 
 		"{":	Token.OP_SCOPE_BEGIN,
-		"}":	Token.OP_SCOPE_END
+		"}":	Token.OP_SCOPE_END,
+		"[":	Token.OP_ARRAY_BEGIN,
+		"]":	Token.OP_ARRAY_END,
+		",":	Token.OP_COMMA,
+		":":	Token.OP_SPECIFY
 	}
 	KEYWORDS = [
 		"print",

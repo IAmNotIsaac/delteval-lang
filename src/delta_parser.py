@@ -1,6 +1,6 @@
 from os import stat
 from delta_lexer import Token
-from delta_types import DeltaNone
+from delta_types import DeltaNone, DeltaNumber
 
 
 class Node:
@@ -32,6 +32,16 @@ class StringNode(Node):
 
 	def __repr__(self) -> str:
 		return f"\"{self.tok.value}\""
+
+
+class ArrayNode(Node):
+	def __init__(self, length, value) -> None:
+		self.length = length
+		self.value = value
+	
+
+	def __repr__(self) -> str:
+		return f"{self.value}"
 
 
 class VarAccessNode(Node):
@@ -271,6 +281,51 @@ class DeltaParser:
 
 				return expr
 		
+
+		elif token.matches(Token.OP_ARRAY_BEGIN):
+			self.advance()
+
+			expressions = []
+
+			while True:
+				expr = self.make_expression()
+
+				if self.token.matches(Token.OP_ARRAY_END):
+					expressions.append(expr)
+					self.advance()
+					break
+
+				elif self.token.matches(Token.OP_COMMA):
+					expressions.append(expr)
+					self.advance()
+
+					if self.token.matches(Token.OP_ARRAY_END):
+						break
+
+					else:
+						continue
+				
+				else:
+					# error!
+					print(f"warning: did not expect {self.token}!")
+
+			length = NumberNode(Token(Token.TYPE_INT, len(expressions)))
+
+			if self.token.matches(Token.OP_SPECIFY):
+				self.advance()
+
+				if self.token.matches(Token.OP_ARRAY_BEGIN):
+					self.advance()
+
+					expr = self.make_expression()
+
+					if self.token.matches(Token.OP_ARRAY_END):
+						self.advance()
+
+						length = expr
+
+			return ArrayNode(length, expressions)
+
 		return self.make_scope()
 
 
