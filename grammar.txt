@@ -1,6 +1,7 @@
 expression		: print expression
 				| return expression
 				| let IDENTIFIER assign expression
+				| func IDENTIFIER LBRACKET RBRACKET scope
 				| comp-expr
 
 
@@ -23,6 +24,7 @@ power			: atom (POW factor)*
 atom			: INT|FLOAT
 				| STRING
 				| IDENTIFIER
+					| IDENTIFIER LBRACKET RBRACKET
 				| true|false
 				| if expression then scope
 				| LBRACKET expression RBRACKET

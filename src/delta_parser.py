@@ -44,6 +44,25 @@ class ArrayNode(Node):
 		return f"{self.value}"
 
 
+class FunctionDefineNode(Node):
+	def __init__(self, name_tok, scope) -> None:
+		self.name_tok = name_tok
+		self.scope = scope
+	
+
+	def __repr__(self) -> str:
+		return f"FunctionDefine({self.name_tok.value})"
+
+
+class FunctionCallNode(Node):
+	def __init__(self, name_tok) -> None:
+		self.name_tok = name_tok
+	
+
+	def __repr__(self) -> str:
+		return f"FunctionCall({self.name_tok.value})"
+
+
 class VarAccessNode(Node):
 	def __init__(self, name_tok) -> None:
 		self.name_tok = name_tok
@@ -69,6 +88,7 @@ class ScopeNode(Node):
 
 		# we use these for the executor
 		self.variables = {}
+		self.functions = {}
 		self.parent = None
 	
 
@@ -77,33 +97,36 @@ class ScopeNode(Node):
 
 	
 	# also used for the executor
-	def get_variable_owner(self, var_name):
-		if var_name in self.variables:
+	def get_owner(self, name, meta_var_name):
+		meta_var = getattr(self, meta_var_name)
+
+		if name in meta_var:
 			return self
 
 		elif self.parent:
-			return self.parent.get_variable_owner(var_name)
+			return self.parent.get_owner(name, meta_var_name)
 		
 		else:
 			return None
 
 	
-	def get_variable(self, var_name):
-		owner = self.get_variable_owner(var_name)
+	def get(self, name, meta_var_name):
+		owner = self.get_owner(name, meta_var_name)
 
 		if owner:
-			return owner.variables[var_name]
+			return getattr(owner, meta_var_name)[name]
 		else:
 			return DeltaNone()
 	
 
-	def set_variable(self, var_name, value):
-		owner = self.get_variable_owner(var_name)
+	def set(self, name, value, meta_var_name):
+		owner = self.get_owner(name, meta_var_name)
 
 		if owner:
-			owner.variables[var_name] = value
+			meta_var = getattr(owner, meta_var_name)
 		else:
-			self.variables[var_name] = value
+			meta_var = getattr(self, meta_var_name)
+		meta_var[name] = value
 
 
 class IfNode(Node):
@@ -196,6 +219,23 @@ class DeltaParser:
 						self.advance()
 
 						return VarAssignNode(var_name, self.make_expression())
+			
+			elif self.token.value == "func":
+				self.advance()
+
+				if self.token.matches(Token.TYPE_IDENTIFER):
+					func_name = self.token
+					self.advance()
+
+					if self.token.matches(Token.OP_LBRACKET):
+						self.advance()
+
+						# argument parsing later!
+
+						if self.token.matches(Token.OP_RBRACKET):
+							self.advance()
+
+							return FunctionDefineNode(func_name, self.make_scope())
 		
 		return self.make_comp_expr()
 
@@ -248,7 +288,18 @@ class DeltaParser:
 		elif token.matches(Token.TYPE_IDENTIFER):
 			self.advance()
 
-			return VarAccessNode(token)
+			if self.token.matches(Token.OP_LBRACKET):
+				self.advance()
+
+				# argument parsing
+
+				if self.token.matches(Token.OP_RBRACKET):
+					self.advance()
+
+					return FunctionCallNode(token)
+
+			else:
+				return VarAccessNode(token)
 		
 
 		elif token.matches(Token.TYPE_KEYWORD):

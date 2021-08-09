@@ -38,18 +38,29 @@ class DeltaExecutor:
 		return DeltaArray(self.visit(node.length, scope), temp)
 
 
+	def visit_FunctionCallNode(self, node, scope):
+		res = scope.get(node.name_tok.value, "functions")
+		res = self.visit(res, scope)
+		return res
+
+
+	def visit_FunctionDefineNode(self, node, scope):
+		scope.set(node.name_tok.value, node.scope, "functions")
+		return DeltaNone()
+
+
 	def visit_VarAccessNode(self, node, scope):
-		return scope.get_variable(node.name_tok.value)
+		return scope.get(node.name_tok.value, "variables")
 
 
 	def visit_VarAssignNode(self, node, scope):
-		scope.set_variable(node.name_tok.value, self.visit(node.node, scope))
-		return DeltaNone
+		scope.set(node.name_tok.value, self.visit(node.node, scope), "variables")
+		return DeltaNone()
 
 
 	def visit_PrintNode(self, node, scope):
 		print(self.visit(node.node, scope))
-		return DeltaNone
+		return DeltaNone()
 	
 
 	def visit_ScopeNode(self, node, scope):
@@ -62,7 +73,7 @@ class DeltaExecutor:
 			if isinstance(statement, ReturnNode):
 				return res
 		
-		return DeltaNone
+		return DeltaNone()
 	
 
 	def visit_ReturnNode(self, node, scope):

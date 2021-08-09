@@ -1,0 +1,12 @@
+func testfunc( ) {
+	print "test 2!";				# we actually don't expect this to be printed first.
+	return "electric boogaloo!";
+};
+print "test 1!";					# this should be the first activated print statement
+print testfunc( );					# we call the function, which activates a print, and returns a value.
+
+
+# expected order:
+# test 1!
+# test 2!
+# electric boogaloo!
