@@ -11,7 +11,5 @@ tokens = lexer.parse()
 parser = DeltaParser(tokens)
 program = parser.parse()
 
-print(program)
-
 executor = DeltaExecutor(program)
 executor.execute()
